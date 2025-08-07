@@ -1,5 +1,6 @@
 package com.admindashboard.earnings;
 
+import com.admindashboard.enums.*;
 import com.admindashboard.driververification.Driver;
 import jakarta.persistence.*;
 import lombok.Getter;

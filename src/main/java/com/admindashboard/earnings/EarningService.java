@@ -1,6 +1,7 @@
 package com.admindashboard.earnings;
 
 import com.admindashboard.driververification.Driver;
+import com.admindashboard.enums.*;
 import com.admindashboard.driververification.DriverRepository;
 import com.admindashboard.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,35 @@ public class EarningService {
     private final DriverRepository driverRepository;
 
     @Autowired
-    public EarningService(EarningRepository earningRepository, 
+    public EarningService(EarningRepository earningRepository,
                          DriverRepository driverRepository) {
         this.earningRepository = earningRepository;
         this.driverRepository = driverRepository;
+    }
+
+    /**
+     * Creates a new earning from an EarningDTO, validates the associated driver, and saves it.
+     *
+     * @param earningDTO The DTO containing the new earning data.
+     * @return The DTO of the newly created earning.
+     */
+    @Transactional
+    public EarningDTO createEarning(EarningDTO earningDTO) {
+        // Find the driver entity to establish the relationship
+        Driver driver = driverRepository.findById(earningDTO.getDriverId())
+                .orElseThrow(() -> new EntityNotFoundException("Driver", earningDTO.getDriverId()));
+
+        // Convert DTO to an Earning entity
+        Earning earning = new Earning();
+        earning.setDriver(driver);
+        earning.setAmount(earningDTO.getAmount());
+        earning.setTransactionDate(earningDTO.getTransactionDate());
+        earning.setPaymentMethod(earningDTO.getPaymentMethod());
+        earning.setPaymentStatus(earningDTO.getPaymentStatus());
+
+        // Save the entity and return the DTO
+        Earning savedEarning = earningRepository.save(earning);
+        return convertToDto(savedEarning);
     }
 
     public List<EarningDTO> getAllEarnings() {
@@ -72,11 +98,10 @@ public class EarningService {
         dto.setTransactionDate(earning.getTransactionDate());
         dto.setPaymentMethod(earning.getPaymentMethod());
         dto.setPaymentStatus(earning.getPaymentStatus());
-        
+
         Driver driver = earning.getDriver();
         dto.setDriverId(driver.getId());
         dto.setDriverName(driver.getUser().getFirstName() + " " + driver.getUser().getLastName());
-        
         return dto;
     }
 }

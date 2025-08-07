@@ -1,11 +1,10 @@
 package com.admindashboard.driververification;
 
-import com.admindashboard.driververification.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.admindashboard.enums.*;
 import java.util.List;
 
 @RestController
@@ -50,13 +49,13 @@ public class DriverController {
 
     @PutMapping("/{id}/verify")
     public ResponseEntity<DriverResponseDTO> verifyDriver(@PathVariable Long id) {
-        DriverResponseDTO updatedDriver = driverService.updateDriverStatus(id, DriverVerificationStatus.VERIFIED);
+        DriverResponseDTO updatedDriver = driverService.updateDriverStatus(id, DriverStatus.VERIFIED); // Changed to VERIFIED
         return new ResponseEntity<>(updatedDriver, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/reject")
     public ResponseEntity<DriverResponseDTO> rejectDriver(@PathVariable Long id) {
-        DriverResponseDTO updatedDriver = driverService.updateDriverStatus(id, DriverVerificationStatus.REJECTED);
+        DriverResponseDTO updatedDriver = driverService.updateDriverStatus(id, DriverStatus.REJECTED);
         return new ResponseEntity<>(updatedDriver, HttpStatus.OK);
     }
 }

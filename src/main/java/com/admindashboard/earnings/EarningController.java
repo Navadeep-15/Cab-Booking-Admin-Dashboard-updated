@@ -2,9 +2,11 @@ package com.admindashboard.earnings;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
+import com.admindashboard.enums.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +19,13 @@ public class EarningController {
     @Autowired
     public EarningController(EarningService earningService) {
         this.earningService = earningService;
+    }
+
+    @PostMapping
+    public ResponseEntity<EarningDTO> createEarning(@Valid @RequestBody EarningDTO earningDTO) {
+        // Assume a service method exists to save the new earning
+        EarningDTO createdEarning = earningService.createEarning(earningDTO);
+        return new ResponseEntity<>(createdEarning, HttpStatus.CREATED);
     }
 
     @GetMapping

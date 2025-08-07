@@ -1,5 +1,6 @@
 package com.admindashboard.usermanagement;
 
+import com.admindashboard.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
